@@ -1,0 +1,10 @@
+body{
+    margin: 0;
+    background: rgb(239, 238, 238);
+}
+
+.divApp{
+    margin: auto;
+    max-width: 70%;
+
+}
