@@ -1,7 +1,7 @@
 import requests
 
-endpoint = 'http://127.0.0.1:8000/accounts/register/'  # Assure-toi que l'URL est correcte
-data = {'email': 'test1@gmail.com', 'password': '1234'}
+endpoint = 'http://127.0.0.1:8000/accounts/login/'  # Assure-toi que l'URL est correcte
+data = {'email': 'test@gmail.com', 'password': '1234'}
 
 # Envoie les données en JSON
 rep = requests.post(endpoint, json=data)

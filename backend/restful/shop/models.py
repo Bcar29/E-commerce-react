@@ -11,7 +11,7 @@ class Familles(models.Model):
     descriptions = models.TextField(blank=True)
 
     class Meta: 
-        verbose_name = "Familles"
+        verbose_name = "Famille"
 
     def __str__(self) -> str:
         return self.name
@@ -20,7 +20,7 @@ class Familles(models.Model):
 # --------------------------------------------------Categorie de produit--------------------------------------------#
 class Categories(models.Model):
     name = models.CharField(max_length=128, )
-    famille = models.ForeignKey(Familles, on_delete=models.CASCADE )
+    famille = models.ForeignKey(Familles, on_delete=models.CASCADE, related_name="categories" )
     thumbnail = models.ImageField(upload_to="products", blank=True, null= True)
     descriptions = models.TextField(blank=True)
     
@@ -31,13 +31,19 @@ class Categories(models.Model):
         return self.name
 
 
-# --------------------------------------------types des produits--------------------------------------------------
+# --------------------------------------------types des produits-----------------------------------------------------
 class Types(models.Model):
     name = models.CharField(max_length=128)
-    Categorie = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    categorie = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name="types")
     thumbnail = models.ImageField(upload_to="products", blank=True, null= True)
     descriptions = models.TextField(blank=True)
 
+    class Meta: 
+        verbose_name = "Type"
+
+    def __str__(self) -> str:
+        return self.name
+   
 
 # ---------------------------Produit (Product)---------------------------------#
 class Product(models.Model):
@@ -46,7 +52,7 @@ class Product(models.Model):
     stock = models.IntegerField(verbose_name="Quantité stoker")
     thumbnail = models.ImageField(upload_to="products", blank=True, null= True)
     description = models.TextField(blank=True, verbose_name="Description du produit")
-    type = models.ForeignKey(Types, on_delete=models.CASCADE)
+    type = models.ForeignKey(Types, on_delete=models.CASCADE, related_name="product")
 
     class Meta:
         verbose_name = "Produit"
@@ -67,6 +73,9 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return f"{self.pays} {self.ville} {self.zip_code}"
+    
+    class Meta: 
+        verbose_name = "Addresse Livraison"
     
 
 # ---------------------------Panier (cart)------------------------------------------#

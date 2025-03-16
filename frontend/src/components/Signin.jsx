@@ -1,34 +1,89 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 export default function Signin() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [result, setResult] = useState(null);
+  const [err, setErr] = useState(null);
 
-    const [password, setPassword] = useState('')
-    const [ifocus, setIfcous] = useState(false)
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    const error = password.length < 8 && ifocus ? <span className="tw-text-red-500 tw-mt-0 tw-italic tw-text-xs">entrer un mot de pass de 8 caractère</span> : ''
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErr(null);
+    setResult(null);
 
-    const isDisabled = password.length < 8 ? false : true
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/accounts/login/", formData);
+      setResult(response.data);
+    } catch (err) {
+      setErr(err.response.data);
+    }
+  };
 
-    const butConnexion = isDisabled ? <button type="submit" className="tw-bg-green-600 tw-py-1.5 hover:tw-bg-green-700 tw-ring-2 tw-text-zinc-50 tw-text-2xl tw-border-zinc-50 tw-rounded"  >Connexion</button> : <button type="submit" className="tw-bg-gray-500 tw-py-1.5 tw-text-zinc-50 tw-text-2xl tw-border-zinc-50 tw-rounded" disabled={true} >Connexion</button>
 
-    // const error = password.length < 8 && (<span className="tw-text-red-400 tw-mt-0 tw-italic tw-text-xs">entrer un mot de pass de 8 caractère</span>)
-
-    return (
-
-        <div className="tw-bg-gradient-to-br tw-from-purple-500 tw-to-violet-700 tw-w-full tw-my-2 tw-p-4" >
-
-            <div className="tw-p-3 tw-w-2/5 tw-mx-auto  tw-rounded  tw-shadow-lg tw-shadow-slate-900 tw-border-slate-900 tw-bg-slate-900">
-                <h3 className="tw-text-center tw-text-zinc-50 tw-italic">Veuillez vous <span className="tw-text-blue-600 fs-2">connectez</span></h3>
-                <form action="" className="tw-flex tw-flex-col tw-w-auto tw-gap-4" method="post">
-                    <input type="email" name="email" placeholder="Entrer votre addresse mail" className="tw-p-2.5 tw-border tw-border-slate-950 tw-rounded" />
-                    <input type="password" name="password" placeholder="Entrer un mot de pass" className="tw-p-2.5 tw-border tw-border-slate-950 tw-rounded" onChange={(e) => setPassword(e.target.value)} onFocus={() => setIfcous(true)} onBlur={() => setIfcous(false)} />
-                    {error}
-                    {butConnexion}
-                    {/* <button type="submit" className="tw-bg-green-600 tw-py-1.5 hover:tw-bg-green-700 tw-text-zinc-50 tw-text-2xl tw-border-zinc-50 tw-rounded" >Connexion</button> */}
-                    <p className="tw-text-white tw-text-center tw-italic">Vous n'avez pas de compte ? <Link to="/signup">s'inscrire</Link> </p>
-                </form>
-            </div>
-        </div>
-    )
+  return (
+    <div className="tw-w-full tw-my-2 tw-p-4">
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}   // Commence légèrement au-dessus avec opacité 0
+        animate={{ y: 0, opacity: 1 }}     // Descend en position normale avec opacité 1
+        exit={{ y: -50, opacity: 0 }}      // Remonte en disparaissant quand on quitte
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+        className="tw-bg-white tw-shadow-lg tw-rounded-lg tw-w-full tw-mx-auto tw-max-w-md tw-p-8 tw-border tw-relative"
+      >
+        <h3 className="tw-text-center tw-text-zinc-600 tw-font-semibold tw-italic tw-mb-4">
+          Veuillez vous <span className="tw-text-blue-600">connecter</span>
+        </h3>
+        <form onSubmit={handleSubmit} className="tw-flex tw-flex-col tw-gap-4">
+          <div className="tw-relative tw-transition-all tw-duration-300 tw-ease-in-out hover:tw-border-blue-500">
+            <FontAwesomeIcon
+              icon={faEnvelope}
+              className="tw-text-zinc-500 tw-absolute tw-top-3 tw-left-3 tw-text-lg"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Entrer votre adresse mail"
+              className="tw-p-2 tw-pl-10 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-w-full tw-transition-all tw-duration-300 focus:tw-border-blue-500"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="tw-relative tw-transition-all tw-duration-300 tw-ease-in-out hover:tw-border-blue-500">
+            <FontAwesomeIcon
+              icon={faLock}
+              className="tw-text-zinc-500 tw-absolute tw-top-3 tw-left-3 tw-text-lg"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Entrer votre mot de passe"
+              className="tw-p-2 tw-pl-10 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-w-full tw-transition-all tw-duration-300 focus:tw-border-blue-500"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+          {err && <span className="tw-text-red-500 tw-text-sm">{err.message}</span>}
+          <button
+            type="submit"
+            className="tw-bg-green-600 tw-py-2 tw-px-4 hover:tw-bg-green-700 tw-text-white tw-font-semibold tw-rounded-md tw-shadow-lg tw-transition-all tw-duration-300 tw-ease-in-out mt-4"
+          >
+            Se connecter
+          </button>
+        </form>
+        <p className="tw-text-center tw-text-gray-500 tw-mt-4">
+          Vous n'avez pas de compte ? <Link to="/signup" className="tw-text-blue-500">S'inscrire</Link>
+        </p>
+      </motion.div>
+    </div>
+  );
 }
