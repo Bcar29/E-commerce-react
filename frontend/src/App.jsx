@@ -23,7 +23,7 @@ import PurchaseHistory from './components/PurchaseHistory';
 
 import { OrderProvider } from './context/OrderContext';
 
-const url = `https://https://alfa29.pythonanywhere.com/types/`
+const url = `https://alfa29.pythonanywhere.com/types/`
 
 function App() {
 
