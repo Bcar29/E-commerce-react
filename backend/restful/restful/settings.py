@@ -79,7 +79,7 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # React frontend
+    "https://e-commerce-react-hazel-five.vercel.app", "http://localhost:5173",  # React frontend
 ]
 
 
