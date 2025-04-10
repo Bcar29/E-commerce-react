@@ -47,7 +47,7 @@ export default function CartContent({ cart, setCart }) {
               className="tw-flex tw-items-center tw-justify-between tw-border-b tw-pb-2"
             >
               <img
-                src={item.thumbnail}
+                src={`http://127.0.0.1:8000/${item.thumbnail}`}
                 alt={item.name}
                 className="tw-w-12 tw-h-12 tw-object-cover tw-rounded"
               />

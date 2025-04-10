@@ -42,7 +42,7 @@ class Types(models.Model):
         verbose_name = "Type"
 
     def __str__(self) -> str:
-        return self.name
+        return f'{self.name} {self.categorie}'
    
 
 # ---------------------------Produit (Product)---------------------------------#

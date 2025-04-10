@@ -1,5 +1,6 @@
+.env
 client
 virtual_env
 clone_E_commerce
-__pycache__/
+**/__pycache__/
 *.py[cod]

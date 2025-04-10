@@ -5,6 +5,8 @@ import img4 from '../assets/img/img4.jpg'
 import { Link } from "react-router-dom";
 
 export default function Home({ donnes }) {
+    console.log(donnes)
+
 
     return (
         <>
@@ -54,7 +56,7 @@ export default function Home({ donnes }) {
                             <div className="">
                                 <h2>{donne.name}</h2>
                                 <div className="card">
-                                    <img src={donne.product[0].thumbnail} alt="" className="card-img-top img-fluid" style={{ height: "150px", objectFit: "cover" }} />
+                                    <img src={`http://127.0.0.1:8000/${donne.product[0].thumbnail}`} alt="" className="card-img-top img-fluid" style={{ height: "150px", objectFit: "cover" }} />
                                     
                                     <div className="card-body" style={{ padding: '4px !important' }}>
 

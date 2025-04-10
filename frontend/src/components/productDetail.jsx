@@ -60,7 +60,7 @@ const ProductDetail = ({ donnes, setCart }) => {
                     <div key={index} className='col-6 col-sm-4 col-md-3'>
                         <div className="card shadow-lg">
                             <img
-                                src={donne.thumbnail}
+                                src={`http://127.0.0.1:8000/${donne.thumbnail}`}
                                 alt={donne.name}
                                 className="card-img-top img-fluid"
                                 style={{ height: "200px", objectFit: "cover" }}
