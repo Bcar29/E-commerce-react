@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -14,6 +21,8 @@ export default function Signup() {
     });
 
     const [password2, setPassword2] = useState('');
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,8 +39,10 @@ export default function Signup() {
         try {
             const response = await axios.post("http://127.0.0.1:8000/accounts/register/", formData);
             toast.success("Inscription réussie !");
+            login(formData.email, formData.password);
             setFormData({ email: "", password: "" });
             setPassword2("");
+            navigate("/");
         } catch (err) {
             if (err.response && err.response.data.error) {
                 toast.error(err.response.data.error);
@@ -41,7 +52,7 @@ export default function Signup() {
         }
     };
 
-    const isDisabled = formData.password.length < 8 || formData.password !== password2;
+    const isDisabled = formData.password.length < 4;
 
     return (
         <div className="tw-flex tw-justify-center tw-items-center tw-min-h-screen">

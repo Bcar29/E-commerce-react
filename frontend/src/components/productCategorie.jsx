@@ -3,10 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-
+// recuperation des produits a partie des famille de produits
 const url = `http://127.0.0.1:8000/familles/`;
 
-const ProductCategories = () => {
+const ProductCategories = ({setCat}) => {
     const [donnes, setDonnes] = useState([]);
     const [activeCategory, setActiveCategory] = useState(null);
     const [activeSubCategory, setActiveSubCategory] = useState(null);
@@ -14,7 +14,7 @@ const ProductCategories = () => {
     useEffect(() => {
         axios.get(url)
             .then(resp => {
-                // console.log(resp.data);
+                
                 setDonnes(resp.data);
             })
             .catch(error => console.error("Erreur de chargement des données", error));
@@ -61,6 +61,7 @@ const ProductCategories = () => {
                                     zIndex: "10"
                                 }}
                             >
+                                
                                 {category.categories.map((sub, subIndex) => (
                                     <div key={subIndex} className="position-relative">
                                         <a
@@ -98,6 +99,7 @@ const ProductCategories = () => {
                                                             borderRadius: "6px",
                                                             transition: "background 0.3s"
                                                         }}
+                                                        onClick={() => setCat(false)}
                                                     >
                                                         {ssub.name}
                                                         <hr />

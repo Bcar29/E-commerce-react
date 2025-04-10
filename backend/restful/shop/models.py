@@ -86,15 +86,15 @@ class Cart(models.Model):
         return self.user.username
 
 
-# ---------------------------Article (Order)------------------------------------#
+# ------------------------------------------------------Article (Order)------------------------------------------------#
 class Order(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through="OrderProduct") 
     shippingaddress = models.OneToOneField(ShippingAddress,null=True, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, verbose_name="client", on_delete=models.SET_NULL, null=True)
+    # cart = models.ForeignKey(Cart, verbose_name="client", on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=1) 
     ordered_date = models.DateTimeField(blank=True, null=True)
-    ordered = models.BooleanField(default=False)
+    # ordered = models.BooleanField(default=False)
     montant = models.FloatField(default=0)
     delivred = models.CharField(max_length=50, choices=([
         ("En_attent","En attente"),
@@ -104,12 +104,15 @@ class Order(models.Model):
     ]), default="En_attente", verbose_name="etat")
  
     def __str__(self):
-        return f"{self.user} {self.quantity}"
+        return f"{self.user}"
     
     class Meta:
         verbose_name = "Commande"
         ordering = ["-quantity"]
 
+    def save(self, *args, **kwargs):
+        self.ordered_date = timezone.now()
+        super().save(*args, **kwargs)
 
 class OrderProduct(models.Model):
     product = models.ForeignKey(Product, verbose_name="Produits", on_delete=models.CASCADE)
@@ -119,7 +122,13 @@ class OrderProduct(models.Model):
     def tatol_amount(self):
         return self.quantity * self.product.price 
         
-        
+    def save(self, *args, **kwargs):
+        self.order.montant += self.tatol_amount()
+        self.order.save()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.product} {self.quantity}"
 # -------------------------------Paiement------------------------------------------#
 class Paiement(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)

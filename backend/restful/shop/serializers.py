@@ -1,15 +1,17 @@
 from rest_framework import serializers
 from .models import *
-from restful.settings import AUTH_USER_MODEL
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class UserSerializers(serializers.ModelSerializer):
-    model = AUTH_USER_MODEL
-    fields = '__all__'
+    class Meta:
+        model = User
+        fields = '__all__'
 
 class ProductSerializers(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'stock', 'thumbnail', 'description', 'type',]
+        fields = ['id', 'name', 'price', 'stock', 'thumbnail', 'description', 'type',]
 
 
 class TypeSerializers(serializers.ModelSerializer):
@@ -23,6 +25,7 @@ class CategorieSerializers(serializers.ModelSerializer):
     class Meta:
         model = Categories
         fields = ['id', 'name', 'thumbnail', 'descriptions', 'types']
+
 
 class FamilleSerializers(serializers.ModelSerializer):
     categories = CategorieSerializers(many = True, read_only=True)
@@ -48,9 +51,9 @@ class CartSerializers(serializers.ModelSerializer):
 
 
 class OrderSerializers(serializers.ModelSerializer):
-    products = ProductSerializers()
+    products = ProductSerializers(many = True)
     shippingaddress = ShippingAdressSerializers()
-    cart = CartSerializers()
+    
     user = UserSerializers()
 
     class Meta:

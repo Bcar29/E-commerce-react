@@ -26,7 +26,11 @@ class ShippingAddressAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'shippingaddress', 'quantity', 'ordered_date', 'ordered', 'montant', 'delivred')
+    list_display = ('user', 'shippingaddress', 'quantity', 'ordered_date', 'montant', 'delivred')
+
+@admin.register(OrderProduct)
+class OrderProductAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'quantity')
 
 @admin.register(Paiement)
 class PaiementAdmin(admin.ModelAdmin):

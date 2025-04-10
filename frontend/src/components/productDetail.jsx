@@ -1,13 +1,56 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
-const ProductDetail = ({ donnes, addToCart }) => {
+import { useParams, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+
+import { AuthContext } from "../context/AuthContext";
+
+
+const ProductDetail = ({ donnes, setCart }) => {
+
     const { id } = useParams();
     const produit = donnes.find(product => product.id === parseInt(id));
 
     if (!produit) return "Produit introuvable";
+
+
+
+
+    const { login, user } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    // Fonction pour ajouter un produit au panier
+    const addToCart = (product) => {
+        if (!user) {
+            navigate("/signin");
+            return;
+        }
+        console.log(product)
+        setCart((prevCart) => {
+            // Vérifier si le produit existe déjà dans le panier
+            const productExisting = prevCart.find((item) => Number(item.id) === Number(product.id));
+            console.log("produit existe : ", productExisting)
+
+            if (productExisting) {
+                // Mettre à jour la quantité si le produit existe déjà
+                toast.info("Quantité mise à jour 🛒", { position: "top-right", autoClose: 2000 });
+                return prevCart.map((item) =>
+                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                );
+            } else {
+                // Ajouter un nouveau produit s'il n'existe pas encore
+                toast.success("Produit ajouté au panier ✅", { position: "top-right", autoClose: 2000 });
+
+                return [...prevCart, { ...product, quantity: 1 }];
+            }
+        });
+    };
+    // end Fonction pour ajouter un produit au panier
+
+
 
     return (
         <div className="container">
@@ -23,9 +66,9 @@ const ProductDetail = ({ donnes, addToCart }) => {
                                 style={{ height: "200px", objectFit: "cover" }}
                             />
                             <div className="card-body text-center">
-                                <h5>{donne.name}</h5>
+                                <h5>{donne.name} </h5>
                                 <p className="text-muted">{donne.description}</p>
-                                
+
                                 {/* Prix du produit */}
                                 <h6 className="text-primary font-weight-bold">
                                     ${donne.price}
@@ -38,6 +81,7 @@ const ProductDetail = ({ donnes, addToCart }) => {
                                 >
                                     <FontAwesomeIcon icon={faShoppingCart} /> Ajouter au panier
                                 </button>
+                                {/* end Bouton d'ajout au panier */}
                             </div>
                         </div>
                     </div>

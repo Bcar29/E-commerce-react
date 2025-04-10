@@ -5,8 +5,6 @@ import img3 from '../assets/img/img3.jpg'
 
 export default function CarouselComponent() {
 
-
-
     return (
         <Carousel>
             <Carousel.Item>

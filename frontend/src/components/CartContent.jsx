@@ -17,6 +17,7 @@ export default function CartContent({ cart, setCart }) {
         .filter((item) => item.quantity > 0)
 
       localStorage.setItem("cart", JSON.stringify(updateCart))
+      console.log(updateCart)
 
       return updateCart
     })
@@ -36,7 +37,7 @@ export default function CartContent({ cart, setCart }) {
         <FontAwesomeIcon icon={faShoppingCart} className="tw-mr-2 tw-text-amber-500" />
         Mon Panier
       </h2>
-
+      
       {/* Liste des produits */}
       {cart.length > 0 ? (
         <ul className="tw-space-y-3">
@@ -50,7 +51,8 @@ export default function CartContent({ cart, setCart }) {
                 alt={item.name}
                 className="tw-w-12 tw-h-12 tw-object-cover tw-rounded"
               />
-              <span className="tw-flex-1 tw-ml-3 tw-text-slate-900">{item.name}</span>
+              <span className="tw-flex-1 tw-ml-3 tw-text-slate-900">{item.name} 
+              </span>
               <span className="tw-flex-1 tw-ml-3 tw-text-slate-900">{item.quantity}</span>
 
               <span className="tw-text-amber-500 tw-font-semibold">

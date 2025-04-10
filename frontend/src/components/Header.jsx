@@ -4,20 +4,21 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCategories from "./productCategorie";
 import Search from "./Search";
+import UserDropdown from "./UserIcon";
 
-export default function Header({cart}) {
+export default function Header({ cart, donnes }) {
   const [cat, setCat] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [divmasquer, setDivmasquer] = useState(false)
   const masquerCat = () => {
     if (divmasquer) {
       setCat(false)
-    }  
+    }
   }
   return (
     <div className="tw-relative">
       <header className="navbar navbar-expand-lg navbar-dark tw-bg-slate-900" style={{ position: "sticky", top: "0", zIndex: "1000" }}>
-        <div className="container-fluid" style={{ alignItems: "center" }}>
+        <div className="container-fluid" >
           {/* Logo */}
           <a href="#" className="navbar-brand">
             <span className="text-2xl text-white font-semibold">Alfa</span>
@@ -34,10 +35,12 @@ export default function Header({cart}) {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+          {/* end Menu Toggle for mobile */}
 
           {/* Navbar Collapse */}
-          <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`} id="navbar-content">
-            <ul className="navbar-nav ml-auto">
+          <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""} w-100 tw-flex tw-flex-col tw-justify-start sm:tw-flex-row md:tw-flex-row sm:tw-justify-around`} id="navbar-content">
+            {/* menu de navigation  */}
+            <ul className="navbar-nav ml-auto tw-text-left">
               <li className="nav-item">
                 <Link to="/" className="nav-link text-white fs-5 hover:text-amber-500">
                   Accueil
@@ -50,7 +53,7 @@ export default function Header({cart}) {
                   onMouseOver={() => setCat(true)}
                   onMouseLeave={masquerCat}
                 >
-                  Catégories
+                  Produits
                 </Link>
               </li>
               <li className="nav-item">
@@ -58,36 +61,39 @@ export default function Header({cart}) {
                   Contact
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to="/graph" className="nav-link text-white fs-5 hover:text-amber-500">
+                  Dashboard
+                </Link>
+              </li>
             </ul>
-            {/* Search bar */}
-            <div className="d-flex ml-auto ">
-              <Search />
-              <Link to="/test" className="mr-3">
-                <FontAwesomeIcon className="text-amber-500 fs-4" icon={faCartArrowDown} />
-                {cart.length}
-              </Link>
-            </div>
+            <div className="tw-flex tw-justify-around w-100">
+              {/* Search bar */}
+              <div className="tw-flex">
+                <Search donnes={donnes}/>
+                <Link to="/test" className="mr-3">
+                  <FontAwesomeIcon className="text-amber-500 fs-4" icon={faCartArrowDown} />
+                  {cart.length}
+                </Link>
+              </div>
+              {/*end Search bar */}
 
-            {/* Cart and User icon */}
-            <div className="d-flex align-items-center ml-3 ms-auto">
-
-              <Link to="/signin" className="text-white fs-4">
-                <FontAwesomeIcon className="text-amber-500" icon={faUser} />
-                <span className="tw-ml-3">Connexion</span>
-              </Link>
+              {/* le Dropdown sous l'icone user  */}
+              <UserDropdown />
+              {/* end Dropdown sous l'icone user  */}
             </div>
           </div>
+          {/* end Navbar Collapse */}
         </div>
-        {/* Navbar Collapse End */}
 
-        {/* Horizontal Line */}
         <hr className="tw-bg-slate-50 tw-h-1" />
       </header>
 
       {/* Product Categories Dropdown */}
       <div style={{ position: "fixed", zIndex: "1000" }} onMouseLeave={() => setCat(!cat)}>
-        {cat && <ProductCategories />}
+        {cat && <ProductCategories setCat={setCat} />}
       </div>
+      {/* end Product Categories Dropdown */}
     </div>
   );
 }
